@@ -1,7 +1,7 @@
 param containerName string = 'zhshen2025'
 param location string = resourceGroup().location
 param image string = 'ghcr.io/li-yanzhi/connectworld2:latest'
-param dnsNameLabel string = '${containerName}'
+param dnsNameLabel string = containerName
 param port int = 443
 param cpu int  = 1
 param memory int  = 2

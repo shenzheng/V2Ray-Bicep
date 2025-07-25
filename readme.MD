@@ -12,6 +12,40 @@ az container create --resource-group ladder --name zhshen2025eastus --location e
 
 ## 准备工作
 
+### 镜像准备
+
+下载镜像
+``` sh
+docker pull ghcr.io/li-yanzhi/connectworld2:latest
+```
+
+另存镜像
+``` sh
+docker save -o connectworld2.lastest.tar ghcr.io/li-yanzhi/connectworld2:latest
+```
+
+在另一台机器上加载镜像
+``` sh
+docker load -i connectworld2.lastest.tar
+```
+
+启用ACR的匿名访问。只有Standard以上Tier可以如此设置。Standard价格约为$20。
+``` sh
+az acr update --name zhshenacr --anonymous-pull-enabled
+```
+
+登录ACR
+``` sh
+echo "{acr password}" | docker login zhshenacr.azurecr.io -u zhshenacr --password-stdin
+```
+
+推送到另外一个repo
+``` sh
+docker tag ghcr.io/li-yanzhi/connectworld2 zhshenacr.azurecr.io/v2ray/connectworld2:latest
+
+docker push zhshenacr.azurecr.io/v2ray/connectworld2:latest
+```
+
 ### Resource Provider
 
 ``` sh
@@ -28,6 +62,12 @@ az group create --name ladderRG --location eastus
 
 ## 通过Bicep部署
 
+### 默认参数
 ```sh
 az deployment group create --resource-group ladderRG --template-file main.bicep --name mainDeployment
+```
+
+### 指定镜像
+```sh
+az deployment group create --resource-group ladderRG --template-file main.bicep --parameters image=zhshenacr.azurecr.io/v2ray/connectworld2:latest --name customDeployment
 ```
