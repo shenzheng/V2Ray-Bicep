@@ -16,7 +16,7 @@ param fileVolumeMountPath string = '/root/.local/'
 
 param commandLine array = [
   '/caddy.sh'
-  '${containerName}.eastus.azurecontainer.io'
+  '${containerName}.${location}.azurecontainer.io'
   'V2RAY_WS'
   '2F15E03B-075E-460E-A27C-93ED282431BD'
 ]

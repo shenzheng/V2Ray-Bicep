@@ -79,6 +79,14 @@ az deployment group create --resource-group ladderRG --template-file main.bicep 
 
 ## 附录
 
+### Caddy文档
+
+https://caddy2.dengxiaolong.com/docs/
+
+### 可用的Storage Account Key
+ACI_CERT_STORAGE_ACCOUNT_NAME=connectworldcert
+STORAGE_KEY=yfLTTviMqFLhxQXB+slpNS8HwlHG1xczLbcBORXmtczG/ylkDe0QEApOQLES3GriQ5UGdbSMbbNZ+AStW640lg==
+
 ### 创建storage、VNet以及Managed Identity
 
 这些功能，由于ACI不支持Managed Identity访问File Share，因此仅作为示例。
