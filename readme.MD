@@ -67,9 +67,9 @@ az group create --name ladderRG --location eastus
 
 ## 通过Bicep部署
 
-### 默认参数
+### 仅部署storageAccount
 ```sh
-az deployment group create --resource-group ladderRG --template-file main.bicep --name mainDeployment
+az deployment group create --resource-group ladderRG --template-file ./modules/storage.bicep --parameters storageAccountName=myv2raysa fileShareName=laddershare
 ```
 
 ### 指定镜像
@@ -390,4 +390,48 @@ module aciModule './modules/aci.bicep' = {
     userIdentityId: identityModule.outputs.identityId
   }
 }
+```
+
+## 命令行创建ACI
+
+```bash
+az container create \
+  --resource-group V2Ray \
+  --name mymanualaci \
+  --location japaneast \
+  --image ghcr.io/li-yanzhi/connectworld2:latest \
+  --dns-name-label mymanualaci \
+  --ports 443 \
+  --restart-policy Always \
+  --os-type Linux \
+  --command-line "'/caddy.sh' 'mymanualaci.japaneast.azurecontainer.io' 'V2RAY_WS' '2F15E03B-075E-460E-A27C-93ED282431BD'" \
+  --azure-file-volume-account-name myv2raysa \
+  --azure-file-volume-account-key {storage account key}} \
+  --azure-file-volume-share-name laddershare \
+  --azure-file-volume-mount-path /root/.local/ \
+  --cpu 1 \
+  --memory 1
+```
+
+## Automation Runbook
+
+```powershell
+param(
+    [string] $ResourceGroupName,
+    [string] $StorageAccountName
+)
+
+Connect-AzAccount -Identity | Out-Null
+
+Write-Output "Enabling Shared Key Access..."
+Set-AzStorageAccount -ResourceGroupName $ResourceGroupName `
+                     -Name $StorageAccountName `
+                     -AllowSharedKeyAccess $true | Out-Null
+
+Write-Output "Enabling Public Network Access..."
+Set-AzStorageAccount -ResourceGroupName $ResourceGroupName `
+                     -Name $StorageAccountName `
+                     -PublicNetworkAccess Enabled | Out-Null
+
+Write-Output "✅ All settings applied."
 ```
