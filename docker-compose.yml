@@ -1,0 +1,23 @@
+services:
+  # init-v2ray:
+  #   image: alpine:3.20
+  #   container_name: init-v2ray
+  #   restart: "no"
+  #   volumes:
+  #     - /mnt/v2ray:/root/.local
+  #   command: ["./caddy.sh", "v2ray-vm.japaneast.cloudapp.azure.com", "V2RAY_WS", "2F15E03B-075E-460E-A27C-93ED282431BD"]
+
+  v2ray:
+    image: ghcr.io/li-yanzhi/connectworld2:latest
+    container_name: v2ray
+    restart: unless-stopped
+    # depends_on:
+    #   init-v2ray:
+    #     condition: service_completed_successfully
+    ports:
+      - "443:443"
+    volumes:
+      - /mnt/v2ray:/root/.local
+    environment:
+      V2RAY_PORT: "443"
+    command: ["v2ray-vm.japaneast.cloudapp.azure.com", "V2RAY_WS", "2F15E03B-075E-460E-A27C-93ED282431BD"]

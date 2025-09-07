@@ -435,3 +435,33 @@ Set-AzStorageAccount -ResourceGroupName $ResourceGroupName `
 
 Write-Output "✅ All settings applied."
 ```
+
+## 创建V2Ray VM
+
+```bash
+# 删除资源组
+az group delete -n v2ray-vm-jpe --yes
+
+# 创建资源组
+az group create -n v2ray-vm-jpe -l japaneast
+
+# 试运行
+az deployment group what-if \
+  -g v2ray-vm-jpe \
+  -p ./v2ray-vm.bicepparam \
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+# 指定外部public key文件
+az deployment group create \
+  -g v2ray-vm-jpe \
+  -p ./v2ray-vm.bicepparam \
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+# 更换vmSize
+az deployment group create \
+  -g v2ray-vm-jpe \
+  -p ./v2ray-vm.bicepparam \
+  -p vmSize="Standard_B1s"
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+```
