@@ -1,6 +1,6 @@
 using './v2ray-vm.bicep'
 
-param location = 'japaneast'
+//param location = 'japaneast'
 param vmName = 'v2ray-vm-jpe'
 param vmSize = 'Standard_B1ls'
 param adminUsername = 'azureuser'

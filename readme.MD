@@ -442,8 +442,11 @@ Write-Output "✅ All settings applied."
 # 删除资源组
 az group delete -n v2ray-vm-jpe --yes
 
-# 创建资源组
+# 创建资源组 japaneast
 az group create -n v2ray-vm-jpe -l japaneast
+
+# 创建资源组 westus
+az group create -n v2ray-vm-wus -l westus
 
 # 试运行
 az deployment group what-if \
@@ -463,5 +466,69 @@ az deployment group create \
   -p ./v2ray-vm.bicepparam \
   -p vmSize="Standard_B1s"
   -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
-
 ```
+
+```bash
+# yanzhi订阅的japaneast部署
+# 删除资源组
+az group delete -n v2ray-vm-jpe-yz --yes
+
+# 创建资源组 japaneast
+az group create -n v2ray-vm-jpe-yz -l japaneast
+
+az deployment group create \
+  -g v2ray-vm-jpe-yz \
+  -p ./v2ray-vm.bicepparam \
+  -p dnsLabel="v2ray-vm-jpe-yz" \
+  -p vmName="v2ray-vm-jpe-yz" \
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+# yanzhi订阅的japaneast2部署
+# 删除资源组
+az group delete -n v2ray-vm-jpe2-yz --yes
+
+# 创建资源组 japaneast2
+az group create -n v2ray-vm-jpe2-yz -l japaneast
+
+az deployment group create \
+  -g v2ray-vm-jpe2-yz \
+  -p ./v2ray-vm.bicepparam \
+  -p dnsLabel="v2ray-vm-jpe2-yz" \
+  -p vmName="v2ray-vm-jpe2-yz" \
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+# https://v2ray-vm-jpe2-yz.japaneast.cloudapp.azure.com/
+
+# yanzhi订阅的westus部署
+# 删除资源组
+az group delete -n v2ray-vm-wus-yz --yes
+
+# 创建资源组 westus
+az group create -n v2ray-vm-wus-yz -l westus
+
+az deployment group create \
+  -g v2ray-vm-wus-yz \
+  -p ./v2ray-vm.bicepparam \
+  -p dnsLabel="v2ray-vm-wus-yz" \
+  -p vmName="v2ray-vm-wus-yz" \
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+# https://v2ray-vm-wus-yz.japaneast.cloudapp.azure.com
+
+# yanzhi订阅的westus2部署
+# 删除资源组
+az group delete -n v2ray-vm-wus2-yz --yes
+
+# 创建资源组 westus2
+az group create -n v2ray-vm-wus2-yz -l westus2
+
+az deployment group create \
+  -g v2ray-vm-wus2-yz \
+  -p ./v2ray-vm.bicepparam \
+  -p dnsLabel="v2ray-vm-wus2-yz" \
+  -p vmName="v2ray-vm-wus2-yz" \
+  -p sshPublicKey="$(< ~/.ssh/id_rsa.pub)"
+
+# https://v2ray-vm-wus2-yz.japaneast.cloudapp.azure.com
+```
+
